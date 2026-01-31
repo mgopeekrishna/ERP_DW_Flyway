@@ -1,0 +1,6 @@
+## PS C:\ERP_DW> & "C:\Program Files\Red Gate\Flyway Desktop\flyway.cmd" -configFiles=C:/ERP_DW/flyway/conf/uat_conf.example migrate
+flyway.url=jdbc:sqlserver://NANDU:1433;databaseName=******;encrypt=true;trustServerCertificate=true
+flyway.user=sa
+flyway.password=******
+flyway.schemas=dbo
+flyway.locations=filesystem:C:/ERP_DW/flyway/sql
