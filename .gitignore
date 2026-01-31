@@ -1,4 +1,5 @@
-flyway/conf/dev.conf
+# Flyway environment configs
+flyway/conf/*.conf
 
 # Word temp files
 ~$*.docx
