@@ -1,4 +1,4 @@
-name: Flyway CI
+name: Flyway CI/CD
 
 on:
   push:
@@ -10,31 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Flyway Validate on DEV
-      uses: redgate/flyway-action@v2
-      with:
-        flyway-version: 11.14.1
-        url: jdbc:sqlserver://${{ secrets.DB_HOST }}:${{ secrets.DB_PORT }};databaseName=${{ secrets.DB_NAME }}
-        user: ${{ secrets.DB_USER }}
-        password: ${{ secrets.DB_PASSWORD }}
-        locations: filesystem:${{ github.workspace }}/flyway/sql
-        command: validate
-name: Flyway CI
-
-on:
-  push:
-    branches:
-      - main
-
-jobs:
-  flyway-validate:
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout repo
+    - name: Checkout repository
       uses: actions/checkout@v3
 
     - name: Download Flyway CLI
@@ -43,5 +19,5 @@ jobs:
         tar -xzf flyway.tar.gz
         mv flyway-11.14.1 flyway
 
-    - name: Run Flyway Validate
+    - name: Validate Flyway migrations on DEV
       run: ./flyway/flyway -url=jdbc:sqlserver://${{ secrets.DB_HOST }}:${{ secrets.DB_PORT }};databaseName=${{ secrets.DB_NAME }} -user=${{ secrets.DB_USER }} -password=${{ secrets.DB_PASSWORD }} -locations=filesystem:${{ github.workspace }}/flyway/sql validate
