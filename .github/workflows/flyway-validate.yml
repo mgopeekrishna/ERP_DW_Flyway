@@ -20,7 +20,7 @@ jobs:
           java-version: 17
 
       - name: Set up Flyway
-        uses: red-gate/flyway-action@v1
+        uses: redgate/flyway-action@v1
         with:
           flyway-version: '11.14.1'
 
