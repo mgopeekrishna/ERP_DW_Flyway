@@ -1,7 +1,10 @@
-name: Flyway Validate POC
+name: Flyway Validate
 
 on:
   push:
+    branches:
+      - main
+  pull_request:
     branches:
       - main
 
@@ -10,18 +13,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Checkout repository
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
-      - name: Set up Java
-        uses: actions/setup-java@v4
+      # Step 2: Set up Java (Flyway requires Java)
+      - name: Set up Java 17
+        uses: actions/setup-java@v3
         with:
           distribution: temurin
           java-version: 17
 
-      - name: Flyway Info (check script versions)
+      # Step 3: Flyway Validate
+      - name: Flyway Validate on DEV
         run: |
-          docker run --rm -v ${{ github.workspace }}/flyway/sql:/flyway/sql flyway/flyway:11 info
-
-      - name: Done
-        run: echo "Flyway validation check finished ✅"
+          docker run --rm -v ${{ github.workspace }}/flyway/sql:/flyway/sql \
+            -e FLYWAY_URL=jdbc:sqlserver://${{ secrets.DB_HOST }}:${{ secrets.DB_PORT }};databaseName=${{ secrets.DB_NAME }} \
+            -e FLYWAY_USER=${{ secrets.DB_USER }} \
+            -e FLYWAY_PASSWORD=${{ secrets.DB_PASSWORD }} \
+            flyway/flyway:11 validate
