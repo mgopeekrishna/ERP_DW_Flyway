@@ -13,17 +13,21 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # Set up Java (Flyway needs it internally)
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 17
 
-      - name: Set up Flyway
-        uses: redgate/flyway-action@v1
+      # Flyway validate using official Docker image
+      - name: Flyway Validate (Docker)
+        uses: docker://flyway/flyway:11
         with:
-          flyway-version: '11.14.1'
-
-      - name: Flyway Validate (no DB connection yet)
+          entrypoint: flyway
         run: |
-          flyway -locations=filesystem:flyway/sql validate
+          flyway -locations=filesystem:/flyway/sql validate
+
+      # Optional: just to confirm step completion
+      - name: Done
+        run: echo "Flyway validate step finished"
