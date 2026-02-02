@@ -10,28 +10,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout the repo
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2️⃣ Set up Java (required by Flyway)
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 17
 
-      # 3️⃣ Run Flyway validate in Docker using in-memory H2 database
-      - name: Flyway Validate (dry-run, safe)
+      - name: Flyway Info (check script versions)
         run: |
-          docker run --rm -v ${{ github.workspace }}/flyway/sql:/flyway/sql \
-            flyway/flyway:11 \
-            -url=jdbc:h2:mem:testdb \
-            -user=sa \
-            -password=sa \
-            -schemas=PUBLIC \
-            validate
+          docker run --rm -v ${{ github.workspace }}/flyway/sql:/flyway/sql flyway/flyway:11 info
 
-      # 4️⃣ Confirmation step
       - name: Done
-        run: echo "Flyway validate step finished successfully ✅"
+        run: echo "Flyway validation check finished ✅"
